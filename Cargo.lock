@@ -27,6 +27,8 @@ name = "able-sandbox"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "serde",
+ "toml",
 ]
 
 [[package]]

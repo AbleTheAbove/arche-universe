@@ -1,54 +1,57 @@
 use bevy::prelude::*;
 
+mod config;
+mod timesys;
+
 fn main() {
+    let config = config::load_config();
     App::build()
+        .insert_resource(WindowDescriptor {
+            title: "Able Sandbox".to_string(),
+            vsync: config.vsync.unwrap_or(false),
+            ..Default::default()
+        })
+        .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
+        .insert_resource(TickTimer(Timer::from_seconds(2.0, true)))
+        .insert_resource(timesys::DateTime { tick: 0 })
         .add_plugins(DefaultPlugins)
         .add_startup_system(add_people.system())
-        .add_system(greet_people.system())
+        .add_plugin(DateTimeSystem)
         .run();
 }
 
 #[derive(Debug)]
-struct Human {
-    age: u8,
-}
-
-struct BaseStats {
-    intelligence: u8,
-    strength: u8,
-    speed: u8,
-    aura: u8, // Used to boost your magic skills, as most magic includes this stat or derived stats
-}
+struct Aether(u32);
 
 #[derive(Debug)]
 struct Name(String);
 //System
-
 fn add_people(mut commands: Commands) {
     commands
         .spawn()
-        .insert(BaseStats {
-            intelligence: 8,
-            strength: 8,
-            speed: 8,
-            aura: 8,
-        })
-        .insert(Name("Elaina Proctor".to_string()));
-    commands.spawn().insert(Name("Elaina penis".to_string()));
-    commands
-        .spawn()
-        .insert(Human { age: 3 })
-        .insert(Name("Renzo Hume".to_string()));
-    commands
-        .spawn()
-        .insert(Human { age: 2 })
-        .insert(Name("Zayna Nieves".to_string()));
-}
+        .insert(Name("Elaina Proctor".to_string()))
+        .insert(Aether(6));
 
-fn greet_people(query: Query<(&Name, &BaseStats)>) {
-    for name in query.iter() {
-        println!("Hello {:?} of age {}!", name.0 .0, name.1.age);
+    commands.spawn().insert(Name("Elaina penis".to_string()));
+}
+struct TickTimer(Timer);
+
+fn read_mana(
+    time: Res<Time>,
+    mut timer: ResMut<TickTimer>,
+    mut datetime: ResMut<timesys::DateTime>,
+) {
+    if timer.0.tick(time.delta()).just_finished() {
+        println!("{}", datetime.tick);
+        datetime.tick += 1;
     }
 }
 
-//entity
+pub struct DateTimeSystem;
+
+impl Plugin for DateTimeSystem {
+    fn build(&self, app: &mut AppBuilder) {
+        // add things to your app here
+        app.add_system(read_mana.system());
+    }
+}
