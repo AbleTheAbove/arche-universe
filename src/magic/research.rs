@@ -1,4 +1,4 @@
-struct research {
+pub struct Research {
     pub arcane: u8,
     pub artificing: u8,
     pub biomancy: u8,
