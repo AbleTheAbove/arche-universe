@@ -35,14 +35,14 @@ pub fn discord_status() {
 
     // Set the activity
     drpc.set_activity(|a| {
-        a.state(match_status(GameStatus::Duel))
+        a.state(match_status(GameStatus::Menu))
             .assets(|ass| {
                 ass.large_image("archeuniverselogo")
-                    .large_text("wat.")
-                    .small_image("archeuniverselogo")
-                    .small_text("Highest Leveled Class Icon")
+                //.large_text("wat.")
+                //.small_image("archeuniverselogo")
+                //.small_text("Highest Leveled Class Icon")
             })
-            .secrets(|a| a.join("MTI4NzM0OjFpMmhuZToxMjMxMjM= "))
+            //.secrets(|a| a.join("MTI4NzM0OjFpMmhuZToxMjMxMjM= "))
             .timestamps(|a| {
                 let start = SystemTime::now();
                 let since_the_epoch = start
@@ -54,8 +54,8 @@ pub fn discord_status() {
                 a.start(in_ms)
                 //.end(1620653237) // Use for a limited time round (Like uh a duel)
             })
-            .details("You thought")
-            .party(|a| a.size((1, 16)))
+        //.details("You thought")
+        //.party(|a| a.size((1, 16)))
     })
     .expect("Failed to set activity");
 

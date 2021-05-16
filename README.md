@@ -12,6 +12,7 @@ Make sure you have vulkan drivers installed!
 
 # Character ideas
 Daedalus
+
 Necromom
 - skelly kid
 - cries if you mention it
