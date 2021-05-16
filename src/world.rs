@@ -32,7 +32,7 @@ pub fn setup(
     for y in worldy.iter() {
         for x in y {
             let position = Vec3::new(x_cord, y_cord, y_cord);
-            let translation = (position * 32.0);
+            let translation = position * 32.0;
 
             commands.spawn_bundle(SpriteBundle {
                 material: xyz.clone(),

@@ -10,12 +10,14 @@ mod world;
 
 fn main() {
     let config = config::load_config();
-    thread::spawn(|| {
-        discord::status();
-    });
+    if config.discordrpc.unwrap_or(true) == true {
+        thread::spawn(|| {
+            discord::discord_status();
+        });
+    }
     App::build()
         .insert_resource(WindowDescriptor {
-            title: "Able Sandbox".to_string(),
+            title: "Arche Universe".to_string(),
             vsync: config.vsync.unwrap_or(false),
             ..Default::default()
         })
@@ -41,6 +43,6 @@ impl Plugin for StartupSystem {
     fn build(&self, app: &mut AppBuilder) {
         app.add_startup_system(add_people.system())
             //.add_startup_system(world::setup.system())
-            .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)));
+            .insert_resource(ClearColor(Color::rgb(1.0, 1.0, 1.0)));
     }
 }

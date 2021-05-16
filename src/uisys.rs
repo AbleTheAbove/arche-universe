@@ -22,7 +22,7 @@ impl Plugin for UISystem {
     fn build(&self, app: &mut AppBuilder) {
         app.add_plugin(FrameTimeDiagnosticsPlugin::default())
             .add_startup_system(ui_start.system())
-            .add_system(text_update_system.system())
+            //            .add_system(text_update_system.system())
             .add_system(text_update_system2.system());
     }
 }
@@ -53,7 +53,7 @@ pub fn ui_start(mut commands: Commands, asset_server: Res<AssetServer>) {
                         style: TextStyle {
                             font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
                             font_size: 60.0,
-                            color: Color::WHITE,
+                            color: Color::BLACK,
                         },
                     },
                     TextSection {
@@ -69,7 +69,39 @@ pub fn ui_start(mut commands: Commands, asset_server: Res<AssetServer>) {
                         style: TextStyle {
                             font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
                             font_size: 60.0,
-                            color: Color::WHITE,
+                            color: Color::BLACK,
+                        },
+                    },
+                    TextSection {
+                        value: "".to_string(),
+                        style: TextStyle {
+                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
+                            font_size: 60.0,
+                            color: Color::GOLD,
+                        },
+                    },
+                    TextSection {
+                        value: "Year: ".to_string(),
+                        style: TextStyle {
+                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
+                            font_size: 60.0,
+                            color: Color::BLACK,
+                        },
+                    },
+                    TextSection {
+                        value: "".to_string(),
+                        style: TextStyle {
+                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
+                            font_size: 60.0,
+                            color: Color::GOLD,
+                        },
+                    },
+                    TextSection {
+                        value: "FPS: ".to_string(),
+                        style: TextStyle {
+                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
+                            font_size: 60.0,
+                            color: Color::BLACK,
                         },
                     },
                     TextSection {
@@ -86,57 +118,26 @@ pub fn ui_start(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..Default::default()
         })
         .insert(Hax);
-
-    commands
-        .spawn_bundle(TextBundle {
-            style: Style {
-                align_self: AlignSelf::FlexEnd,
-                ..Default::default()
-            },
-            // Use `Text` directly
-            text: Text {
-                // Construct a `Vec` of `TextSection`s
-                sections: vec![
-                    TextSection {
-                        value: "FPS: ".to_string(),
-                        style: TextStyle {
-                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
-                            font_size: 60.0,
-                            color: Color::WHITE,
-                        },
-                    },
-                    TextSection {
-                        value: "".to_string(),
-                        style: TextStyle {
-                            font: asset_server.load("Noto_Serif/NotoSerif-Regular.ttf"),
-                            font_size: 60.0,
-                            color: Color::GOLD,
-                        },
-                    },
-                ],
-                ..Default::default()
-            },
-            ..Default::default()
-        })
-        .insert(FpsText);
-}
-
-fn text_update_system(diagnostics: Res<Diagnostics>, mut query: Query<&mut Text, With<FpsText>>) {
-    for mut text in query.iter_mut() {
-        if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
-            if let Some(average) = fps.average() {
-                // Update the value of the second section
-                text.sections[1].value = format!("{:.2}", average);
-            }
-        }
-    }
 }
 
 struct Hax;
-fn text_update_system2(datetime: Res<timesys::DateTime>, mut query: Query<&mut Text, With<Hax>>) {
+fn text_update_system2(
+    diagnostics: Res<Diagnostics>,
+    datetime: Res<timesys::DateTime>,
+    mut query: Query<&mut Text, With<Hax>>,
+) {
     for mut text in query.iter_mut() {
         // Update the value of the second section
         text.sections[1].value = format!("{}\n", datetime.tick);
         text.sections[3].value = format!("{}\n", datetime.day);
+        text.sections[5].value = format!("{}\n", datetime.year);
+        text.sections[7].value = format!("{}\n", datetime.year);
+
+        if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
+            if let Some(average) = fps.average() {
+                // Update the value of the second section
+                text.sections[7].value = format!("{:.2}", average);
+            }
+        }
     }
 }
