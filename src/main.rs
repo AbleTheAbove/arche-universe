@@ -46,3 +46,5 @@ impl Plugin for StartupSystem {
             .insert_resource(ClearColor(Color::rgb(1.0, 1.0, 1.0)));
     }
 }
+
+pub struct Player {}

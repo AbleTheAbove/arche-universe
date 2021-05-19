@@ -16,23 +16,25 @@ pub fn discord_status() {
     // Start up the client connection, so that we can actually send and receive stuff
 
     drpc.start();
-    drpc.subscribe(Event::ActivityJoin, |j| {
-        j.secret("MTI4NzM0OjFpMmhuZToxMjMxMjM= ")
-    })
-    .expect("Failed to subscribe to event");
+    /*
+        drpc.subscribe(Event::ActivityJoin, |j| {
+            j.secret("MTI4NzM0OjFpMmhuZToxMjMxMjM= ")
+        })
+        .expect("Failed to subscribe to event");
 
-    drpc.subscribe(Event::ActivityJoinRequest, |s| {
-        println!("{:?}", s);
-        s
-    })
-    .expect("Failed to subscribe to event");
+        drpc.subscribe(Event::ActivityJoinRequest, |s| {
+            println!("{:?}", s);
+            s
+        })
+        .expect("Failed to subscribe to event");
 
-    drpc.unsubscribe(Event::ActivityJoinRequest, |j| {
-        println!("{:?}", j);
-        j
-    })
-    .expect("Failed to unsubscribe from event");
+        drpc.unsubscribe(Event::ActivityJoinRequest, |j| {
+            println!("{:?}", j);
+            j
+        })
+        .expect("Failed to unsubscribe from event");
 
+    */
     // Set the activity
     drpc.set_activity(|a| {
         a.state(match_status(GameStatus::Menu))
